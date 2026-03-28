@@ -1,0 +1,45 @@
+{
+  "name": "@kampfcaspar/rxdb-dynamic-defaults",
+  "version": "0.1.0",
+  "description": "Dynamic Defaults Plugin for RxDB",
+  "license": "AGPL-3.0-or-later",
+  "author": "KampfCaspar <code@kampfcaspar.ch>",
+  "type": "module",
+  "exports": {
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    },
+    "import": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "lint": "eslint",
+    "check": "tsc --noEmit",
+    "build": "pkgroll",
+    "test": "mocha"
+  },
+  "mocha": {
+    "require": "tsx",
+    "spec": "test/**/*.test.ts"
+  },
+  "devDependencies": {
+    "@types/assert": "^1.5.11",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^25.5.0",
+    "assert": "^2.1.0",
+    "eslint": "^10.1.0",
+    "mocha": "^11.7.5",
+    "pkgroll": "^2.27.0",
+    "rxdb": "^16.21.1",
+    "rxjs": "^7.8.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.0",
+    "typescript-eslint": "^8.57.2"
+  },
+  "peerDependencies": {
+    "rxdb": "^16"
+  }
+}

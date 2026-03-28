@@ -1,0 +1,7 @@
+version = 1
+
+[[annotations]]
+path = [ ".gitignore", "eslint.config.ts", "package.json", "pnpm*", "tsconfig.json" ]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 KampfCaspar <code@kampfcaspar.ch>"
+SPDX-License-Identifier = "CC0-1.0"
