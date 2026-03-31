@@ -5,8 +5,10 @@
 
 import type { RxCollection, RxCollectionCreator, RxPlugin } from "rxdb";
 
+export type DynamicDefaultsCallback<T, K extends keyof T> = (doc?: T, collection?: RxCollection<T>, key?: K) => T[K];
+
 export type DynamicDefaultsConfiguration<T> = {
-	[K in keyof T]?: T[K] | ((doc?: T, key?: K) => T[K]);
+	[K in keyof T]?: T[K] | DynamicDefaultsCallback<T, K>;
 };
 
 function preInsertHook<T>(this: RxCollection<T>, doc: T): void {
@@ -18,7 +20,7 @@ function preInsertHook<T>(this: RxCollection<T>, doc: T): void {
 			continue;
 		}
 		if (doc[key] === undefined) { // catches both absent and undefined
-			doc[key] = (typeof defaultValue === 'function' ? defaultValue(doc, key) : defaultValue);
+			doc[key] = (typeof defaultValue === 'function' ? defaultValue(doc, this, key) : defaultValue);
 		}
 	}
 }

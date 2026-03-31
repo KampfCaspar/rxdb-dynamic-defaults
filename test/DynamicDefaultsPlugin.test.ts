@@ -24,6 +24,9 @@ const collectionSchema = {
 		name: {
 			type: 'string'
 		},
+		other_name: {
+			type: 'string'
+		},
 		age: {
 			type: 'number'
 		},
@@ -99,12 +102,16 @@ describe("DynamicDefaultsPlugin", async () => {
 			await db.addCollections({
 				second: {
 					schema: collectionSchema,
+					statics:{
+						super_static: () => "static name"
+					},
 					options: {
 						dynamicDefaults: {
 							id: () => 'test_id_99',
 							name: () => 'default name',
+							other_name: (doc: object, collection: { super_static: () => string }) => collection.super_static(),
 							age: (doc: { id: string }) => doc.id.length,
-							tripleAge: (doc: object, key: string) => key.length
+							tripleAge: (doc: object, collection: object, key: string) => key.length
 						}
 					}
 				}
@@ -127,6 +134,12 @@ describe("DynamicDefaultsPlugin", async () => {
 				id: 'test_id_3'
 			});
 			assert.equal(doc.tripleAge, 9);
+		});
+		it("should apply defaults with collection parameter", async () => {
+			const doc = await db.second.insert({
+				id: 'test_id_4'
+			});
+			assert.equal(doc.other_name, "static name");
 		});
 		it("should be able to populate primary key", async () => {
 			const doc = await db.second.insert({
