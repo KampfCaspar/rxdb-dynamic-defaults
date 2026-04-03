@@ -1,7 +1,11 @@
 {
   "name": "@kampfcaspar/rxdb-dynamic-defaults",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Dynamic Defaults Plugin for RxDB",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KampfCaspar/rxdb-dynamic-defaults.git"
+  },
   "license": "AGPL-3.0-or-later",
   "author": "KampfCaspar <code@kampfcaspar.ch>",
   "type": "module",
