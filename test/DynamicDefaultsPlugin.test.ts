@@ -10,7 +10,7 @@ import { addRxPlugin, createRxDatabase } from "rxdb";
 import { getRxStorageMemory } from "rxdb/plugins/storage-memory";
 import { wrappedValidateAjvStorage } from "rxdb/plugins/validate-ajv";
 import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
-import DynamicDefaultsPlugin from "../src";
+import { DynamicDefaultsPlugin } from "../src";
 
 const collectionSchema = {
 	version: 0,

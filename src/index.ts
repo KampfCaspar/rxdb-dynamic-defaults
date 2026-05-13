@@ -25,7 +25,7 @@ function preInsertHook<T>(this: RxCollection<T>, doc: T): void {
 	}
 }
 
-const DynamicDefaultsPlugin: RxPlugin = {
+export const DynamicDefaultsPlugin: RxPlugin = {
 	name: 'rxdb-dynamic-defaults',
 	rxdb: true,
 
@@ -39,4 +39,3 @@ const DynamicDefaultsPlugin: RxPlugin = {
 		}
 	}
 }
-export default DynamicDefaultsPlugin
