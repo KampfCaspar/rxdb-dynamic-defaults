@@ -6,13 +6,20 @@
 import { describe, it } from 'mocha';
 import assert from "assert";
 
-import { addRxPlugin, createRxDatabase } from "rxdb";
+import {
+	addRxPlugin,
+	createRxDatabase,
+	ExtractDocumentTypeFromTypedRxJsonSchema,
+	RxCollection,
+	toTypedRxJsonSchema
+} from "rxdb";
 import { getRxStorageMemory } from "rxdb/plugins/storage-memory";
 import { wrappedValidateAjvStorage } from "rxdb/plugins/validate-ajv";
-import { RxDBDevModePlugin } from "rxdb/plugins/dev-mode";
+import { RxDBDevModePlugin, disableWarnings } from "rxdb/plugins/dev-mode";
+
 import { DynamicDefaultsPlugin } from "../src";
 
-const collectionSchema = {
+const collectionSchema = toTypedRxJsonSchema({
 	version: 0,
 	primaryKey: 'id',
 	type: 'object',
@@ -39,7 +46,10 @@ const collectionSchema = {
 		}
 	},
 	required: ['id']
-};
+} as const);
+
+type DocType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof collectionSchema>;
+type CollectionType = RxCollection<DocType, unknown, { super_static: () => string }>;
 
 describe("DynamicDefaultsPlugin", async () => {
 
@@ -54,6 +64,7 @@ describe("DynamicDefaultsPlugin", async () => {
 
 	describe("adding the plugin", async () => {
 		it("should not throw an error", async () => {
+			disableWarnings();
 			addRxPlugin(RxDBDevModePlugin);
 			addRxPlugin(DynamicDefaultsPlugin);
 		})
@@ -109,9 +120,9 @@ describe("DynamicDefaultsPlugin", async () => {
 						dynamicDefaults: {
 							id: () => 'test_id_99',
 							name: () => 'default name',
-							other_name: (doc: object, collection: { super_static: () => string }) => collection.super_static(),
-							age: (doc: { id: string }) => doc.id.length,
-							tripleAge: (doc: object, collection: object, key: string) => key.length
+							other_name: (doc: DocType, collection: CollectionType) => collection.super_static(),
+							age: (doc: DocType) => doc.id.length,
+							tripleAge: (doc: DocType, collection: CollectionType, key: string) => key.length
 						}
 					}
 				}
@@ -147,4 +158,40 @@ describe("DynamicDefaultsPlugin", async () => {
 			assert.equal(doc.id, "test_id_99");
 		});
 	});
+
+	describe("adding collection with doc level default", async () => {
+		it("should not throw an error", async () => {
+			await db.addCollections({
+				third: {
+					schema: collectionSchema,
+					statics:{
+						super_static: () => "static name"
+					},
+					options: {
+						dynamicDefaults: (doc : DocType, collection : CollectionType) => {
+							doc.id ??= 'test_id_99';
+							doc.name ??= 'default name';
+							doc.other_name ??= collection.super_static();
+							doc.age ??= doc.id.length;
+						}
+					}
+				}
+			});
+		});
+		it("should apply doc defaults", async () => {
+			const doc = await db.third.insert({
+				id: 'test_id_1'
+			});
+			assert.equal(doc.id, 'test_id_1');
+			assert.equal(doc.name, 'default name');
+			assert.equal(doc.age, 9);
+			assert.equal(doc.other_name, "static name");
+		});
+		it("should be able to populate primary key", async () => {
+			const doc = await db.third.insert({
+			});
+			assert.equal(doc.id, "test_id_99");
+		});
+	});
+
 });
