@@ -1,6 +1,6 @@
 {
   "name": "@kampfcaspar/rxdb-dynamic-defaults",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Dynamic Defaults Plugin for RxDB",
   "repository": {
     "type": "git",
@@ -10,12 +10,10 @@
   "author": "KampfCaspar <code@kampfcaspar.ch>",
   "type": "module",
   "exports": {
-    "require": {
-      "types": "./dist/index.d.cts",
-      "default": "./dist/index.cjs"
-    },
-    "import": {
-      "types": "./dist/index.d.mts",
+    ".": {
+      "types":   "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import":  "./dist/index.mjs",
       "default": "./dist/index.mjs"
     }
   },
