@@ -1,6 +1,6 @@
 {
   "name": "@kampfcaspar/rxdb-dynamic-defaults",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Dynamic Defaults Plugin for RxDB",
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "files": [
     "dist",
     "LICENSES",
+    "README.md",
     "REUSE.toml"
   ],
   "scripts": {
@@ -45,11 +46,10 @@
     "tsx": "^4.22.3",
     "typescript": "^5.0",
     "typescript-eslint": "^8.57.2",
-    "rxdb": "^17",
+    "rxdb": "^17.3",
     "rxjs": "^7.8.2"
   },
   "peerDependencies": {
-    "rxdb": "^17",
-    "rxjs": "^7.8.2"
+    "rxdb": "^17.3"
   }
 }
